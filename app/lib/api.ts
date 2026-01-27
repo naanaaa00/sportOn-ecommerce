@@ -2,7 +2,11 @@ export default async function fetchAPI<T>(
     endpoint: string,
     options?: RequestInit
 ): Promise<T> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    if(!baseUrl){
+        throw new Error("Missing NEXT_PUBLIC_API_URL. Set it in your environment (e.g., Vercel project settings).");
+    }
+    const res = await fetch(`${baseUrl}${endpoint}`, {
         ...options,
         cache: options?.cache || 'no-store',
     })
@@ -23,8 +27,11 @@ export default async function fetchAPI<T>(
 
 export function getImageUrl(path: string){
     if(path.startsWith('http')) return path;
-    
     const root = process.env.NEXT_PUBLIC_API_ROOT || '';
+    if(!root){
+        // Fallback to relative path to avoid runtime crash; caller can still render broken image gracefully
+        return path.startsWith('/') ? path : `/${path}`;
+    }
     // Pastikan ada slash di antara root dan path
     if (!root.endsWith('/') && !path.startsWith('/')) {
         return `${root}/${path}`;
