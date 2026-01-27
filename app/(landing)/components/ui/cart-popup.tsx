@@ -3,67 +3,19 @@ import Image from "next/image";
 import Button from "./button";
 import { FiArrowRight, FiTrash2 } from "react-icons/fi";
 import { useRouter } from "next/dist/client/components/navigation";
+import { useCartStore } from "@/app/hooks/use-cart-store";
+import { getImageUrl } from "@/app/lib/api";
 
-export const cartList = [
-    {
-        name: "SportsOn Product 1",
-        category: "Running",
-        price: 450000,
-        qty: 3,
-        imgUrl: "product-1.png",
-    },
-    {
-        name: "SportsOn Product 2",
-        category: "Running",
-        price: 250000,
-        qty: 3,
-        imgUrl: "product-1.png",
-    },
-    {
-        name: "SportsOn Product 3",
-        category: "Running",
-        price: 230000,
-        qty: 3,
-        imgUrl: "product-3.png",
-    },
-    {
-        name: "SportsOn Product 3",
-        category: "Running",
-        price: 230000,
-        qty: 3,
-        imgUrl: "product-3.png",
-    },
-    {
-        name: "SportsOn Product 3",
-        category: "Running",
-        price: 230000,
-        qty: 3,
-        imgUrl: "product-3.png",
-    },
-    {
-        name: "SportsOn Product 3",
-        category: "Running",
-        price: 230000,
-        qty: 3,
-        imgUrl: "product-3.png",
-    },
-    {
-        name: "SportsOn Product 3",
-        category: "Running",
-        price: 230000,
-        qty: 3,
-        imgUrl: "product-3.png",
-    },
-];
 
 const CartPopup = () => {
     const { push } = useRouter();
+    const { items, removeItem, reset } = useCartStore();
 
     const handleCheckout = () => {
         push("/checkout");
     };
 
-    const totalPrice = cartList.reduce((total, item) => total + (item.price * item.qty), 0);
+    const totalPrice = items.reduce((total, item) => total + (item.price * item.qty), 0);
     return (
         <div className="absolute bg-white right-0 top-12 shadow-xl shadow-black/10 border border-gray-200 w-90 z-10">
             <div className="p-4 border-b border-gray-200 font-bold text-center">
@@ -71,12 +23,12 @@ const CartPopup = () => {
             </div>
             <div className="overflow-auto max-h-75">
                 {
-                    cartList.map((item, index) => (
-                        <div className="border-b border-gray-200 p-4 flex gap-3 " key={index}>
+                    items.length ? items.map((item) => (
+                        <div className="border-b border-gray-200 p-4 flex gap-3 " key={item._id}>
                             <div className="bg-primary-light aspect-square w-16 flex justify-center items-center">
                                 <Image
 
-                                    src={`/images/products/${item.imgUrl}`}
+                                    src={getImageUrl(item.imageUrl)}
                                     width={63}
                                     height={63}
                                     alt={item.name}
@@ -101,12 +53,17 @@ const CartPopup = () => {
                                     size="small"
                                     variant="ghost"
                                     className="w-7 h-7 p-0! self-center ml-auto"
+                                    onClick={() => removeItem(item._id)}
                                 >
                                     <FiTrash2 />
                                 </Button>
                             </div>
                         </div>
-                    ))
+                    )): (
+                        <div className="text-center py-5 opacity-50">
+                            Your cart is empty.
+                        </div>
+                    )
                 }
             </div>
             <div className="border-t border-gray-200 p-4">
