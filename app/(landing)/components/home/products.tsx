@@ -10,11 +10,11 @@ import { useCartStore } from "@/app/hooks/use-cart-store";
 import React from "react";
 
 type TProductsProps = {
-  products: Product[]; 
+  products: Product[];
 }
 
-const ProductsSection = ( { products }: TProductsProps ) => {
-  const {addItem} = useCartStore();
+const ProductsSection = ({ products }: TProductsProps) => {
+  const { addItem } = useCartStore();
 
   const handleAddtoCart = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
@@ -47,7 +47,9 @@ const ProductsSection = ( { products }: TProductsProps ) => {
             </div>
             <h3 className="font-medium text-lg mb-1.5 mt-4">{product.name}</h3>
             <div className="flex justify-between mb-8">
-              <div className="text-gray-500">{product.category.name}</div>
+              <div className="text-gray-500">
+                {product.category?.name ?? "Uncategorized"}
+              </div>
               <div className="font-medium text-primary">
                 {priceFormatter(product.price)}
               </div>

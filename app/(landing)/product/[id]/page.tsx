@@ -6,10 +6,10 @@ import { getImageUrl } from "@/app/lib/api";
 
 
 export type TPageProps = {
-  params: Promise<{id: string}>;
+  params: Promise<{ id: string }>;
 }
-const ProductDetail = async ({params}: TPageProps) => {
-  const {id} = await params;
+const ProductDetail = async ({ params }: TPageProps) => {
+  const { id } = await params;
 
   const product = await getProductDetail(id);
 
@@ -29,7 +29,7 @@ const ProductDetail = async ({params}: TPageProps) => {
       <div className="w-full py-7">
         <h1 className="font-bold text-5xl mb-6">{product.name}</h1>
         <div className="bg-primary-light rounded-full text-primary py-2 px-6 w-fit mb-5">
-          {product.category.name}
+          {product.category?.name ?? "Uncategorized"}
         </div>
         <p className="leading-loose mb-8">
           {product.description}
