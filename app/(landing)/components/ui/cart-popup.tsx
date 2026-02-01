@@ -1,10 +1,8 @@
-"use client";
-
 import priceFormatter from "@/app/utils/price-formatter";
 import Image from "next/image";
 import Button from "./button";
 import { FiArrowRight, FiTrash2 } from "react-icons/fi";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/dist/client/components/navigation";
 import { useCartStore } from "@/app/hooks/use-cart-store";
 import { getImageUrl } from "@/app/lib/api";
 
@@ -61,7 +59,7 @@ const CartPopup = () => {
                                 </Button>
                             </div>
                         </div>
-                    )) : (
+                    )): (
                         <div className="text-center py-5 opacity-50">
                             Your cart is empty.
                         </div>
@@ -77,9 +75,9 @@ const CartPopup = () => {
                         {priceFormatter(totalPrice)}
                     </div>
                 </div>
-                <Button
-                    variant="dark"
-                    size="small"
+                <Button 
+                    variant="dark" 
+                    size="small" 
                     className="w-full mt-4"
                     onClick={handleCheckout}>
                     Checkout Now <FiArrowRight />
